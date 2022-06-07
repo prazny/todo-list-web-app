@@ -6,9 +6,7 @@ from sqlalchemy.orm import sessionmaker
 config = dotenv_values()
 
 
-engine = create_engine(
-    config["DATABASE_URI"], connect_args={}
-)
+engine = create_engine(config["DATABASE_URI"], connect_args={})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
