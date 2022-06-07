@@ -1,5 +1,10 @@
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from app.api.routes import routes
+
+from app.db.database import SessionLocal
+
+load_dotenv('.env')
 
 
 def get_app() -> FastAPI:
@@ -10,5 +15,3 @@ def get_app() -> FastAPI:
 
 
 app = get_app()
-
-
