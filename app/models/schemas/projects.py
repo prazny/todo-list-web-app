@@ -3,17 +3,17 @@ from pydantic import BaseModel
 from app.models.domain.users import User
 
 
-class BoardBase(BaseModel):
+class ProjectBase(BaseModel):
     name: str
     description: str
     color: str
 
 
-class BoardCreate(BoardBase):
+class ProjectCreate(ProjectBase):
     pass
 
 
-class Board(BoardBase):
+class Project(ProjectBase):
     id: int
     #owner: User
 

@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from app.db.database import Base
 
 
-class Board(Base):
+class Project(Base):
     __tablename__ = 'boards'
 
     id = Column(Integer, primary_key=True, index=True)
