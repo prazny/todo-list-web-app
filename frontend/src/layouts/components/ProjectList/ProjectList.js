@@ -11,7 +11,7 @@ export function ProjectList() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/account/boards")
+    fetch("http://127.0.0.1:8000/api/account/projects")
       .then(res => res.json())
       .then(
         (result) => {

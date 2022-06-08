@@ -15,7 +15,7 @@ class BoardCreate(BoardBase):
 
 class Board(BoardBase):
     id: int
-    owner: User
+    #owner: User
 
     class Config:
         orm_mode = True

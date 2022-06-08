@@ -8,8 +8,8 @@ class User:
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, index=True)
-    username: Column(String)
     email: Column(String, unique=True)
     firstname: Column(String, nullable=True)
     lastname: Column(String, nullable=True)
-    boards: relationship("Board", back_populates="owner")
+    #boards: relationship("Board", back_populates="owner")
+    password = Column(String)
