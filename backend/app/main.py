@@ -4,8 +4,6 @@ from app.api.routes import routes
 
 from app.db.database import SessionLocal
 
-load_dotenv('.env')
-
 
 def get_app() -> FastAPI:
     application = FastAPI()
