@@ -1,16 +1,16 @@
 from pydantic import BaseModel
 
 
-class TaskBase(BaseModel):
+class SubtaskBase(BaseModel):
     name: str
     status: str
 
 
-class TaskCreate(TaskBase):
+class SubtaskCreate(SubtaskBase):
     pass
 
 
-class Task(TaskBase):
+class Subtask(SubtaskBase):
     id: int
 
     class Config:

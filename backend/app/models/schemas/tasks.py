@@ -6,7 +6,7 @@ class TaskBase(BaseModel):
     color: str
 
 
-class CreateTask(TaskBase):
+class TaskCreate(TaskBase):
     pass
 
 
