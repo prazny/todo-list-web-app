@@ -15,6 +15,7 @@ class Project(Base):
     color = Column(ColorType, nullable=False)
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     owner = relationship("User", back_populates="projects")
+    tasks = relationship("Task", back_populates="projects")
 
 
     def __repr__(self):

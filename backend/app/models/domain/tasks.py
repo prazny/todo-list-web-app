@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy_utils import ColorType
 from sqlalchemy.orm import relationship
 from colour import Color
@@ -13,3 +13,7 @@ class Task(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), nullable=False)
     color = Column(ColorType)
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
+    project = relationship("Project", back_populates="tasks")
+    subtasks = relationship("Subtask", back_populates="task")
+

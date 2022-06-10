@@ -1,6 +1,6 @@
 import enum
 
-from sqlalchemy import Column, Integer, String, Enum
+from sqlalchemy import Column, Integer, String, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
 from app.models.domain.base import Base
@@ -17,5 +17,6 @@ class Subtask(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), nullable=False)
     status = Column(Enum(TaskStatus), nullable=False)
-    # owner = User
+    task_id = Column(Integer, ForeignKey("tasks.id"), nullable=False)
+    task = relationship("User", back_populates="subtasks")
     # assignment = User
