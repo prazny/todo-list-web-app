@@ -17,7 +17,7 @@ def get_boards(offset: int = 0, limit: int = 25, db: Session = Depends(get_db)):
 @router.post("", response_model=schema_boards.Project)
 def create_board(board: schema_boards.ProjectCreate, db: Session = Depends(get_db)):
     db_boards = db.query(boards.Project).filter(boards.Project.name == board.name).first()
-    if (db_boards):
+    if db_boards:
         raise HTTPException(status_code=400, detail="Name already exists.")
     db_item = boards.Project(**board.dict())
     db.add(db_item)
