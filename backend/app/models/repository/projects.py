@@ -8,7 +8,7 @@ def get_user_projects(db: Session, user_id: int, offset: int = 0, limit: int = 2
 
 
 def create_project(db: Session, project: project_schema.ProjectCreate, user_id: int):
-    db_item = Project(**item.dict(), owner_id=user_id)
+    db_item = Project(**project.dict(), owner_id=user_id)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
