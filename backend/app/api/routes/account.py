@@ -18,6 +18,7 @@ from app.models.domain.projects import Project
 router = APIRouter()
 
 
+
 @router.get("", tags=['account'])
 def get_current_user_r(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return current_user
@@ -43,7 +44,7 @@ def create_project(project: project_schema.ProjectCreate, current_user: User = D
 
 @router.get("/projects/{project_id}", response_model=project_schema.Project, tags=['project'])
 def get_project(project_id: int, current_user: User = Depends(get_current_user),
-                     db: Session = Depends(get_db)):
+                db: Session = Depends(get_db)):
     project = project_repo.get_user_project(db, current_user.id, project_id)
     if not project:
         raise HTTPException(status_code=404, detail="Project doesn't exist.")
@@ -52,16 +53,16 @@ def get_project(project_id: int, current_user: User = Depends(get_current_user),
 
 @router.put("/projects/{project_id}", response_model=project_schema.Project, tags=['project'])
 def get_project(project: project_schema.ProjectUpdate, project_id: int, current_user: User = Depends(get_current_user),
-                     db: Session = Depends(get_db)):
-    project = project_repo.get_user_project(db, current_user.id, project_id)
-    if not project:
+                db: Session = Depends(get_db)):
+    project_check = project_repo.get_user_project(db, current_user.id, project_id)
+    if not project_check:
         raise HTTPException(status_code=404, detail="Project doesn't exist.")
     return project_repo.update_project(db, project_id, project)
 
 
 @router.delete("/projects/{project_id}", tags=['project'])
 def delete_project(project_id: int, current_user: User = Depends(get_current_user),
-                     db: Session = Depends(get_db)):
+                   db: Session = Depends(get_db)):
     project = project_repo.get_user_project(db, current_user.id, project_id)
     if not project:
         raise HTTPException(status_code=404, detail="Project doesn't exist.")
@@ -77,13 +78,14 @@ def get_task(task_id: int, current_user: User = Depends(get_current_user),
     project = project_repo.get_user_project(db, current_user.id, task.project_id)
     if not task or project.owner_id != current_user.id:
         raise HTTPException(status_code=404, detail="Task doesn't exist.")
+    task.subtasks.sort(key=lambda x: x.status.value)
 
     return task
 
 
-@router.delete("/tasks/{task_id}", response_model=task_schema.Task, tags=['task'])
+@router.delete("/tasks/{task_id}", tags=['task'])
 def delete_task(task_id: int, current_user: User = Depends(get_current_user),
-             db: Session = Depends(get_db)):
+                db: Session = Depends(get_db)):
     task = task_repo.get_task(db, task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task doesn't exist.")
@@ -103,6 +105,25 @@ def create_task(task: task_schema.TaskCreate, project_id: int,
         raise HTTPException(status_code=404, detail="Project doesn't exist.")
 
     return task_repo.create_task(db, task, project_id)
+
+
+@router.post("/subtasks/{subtask_id}/change-status", tags=['subtask'])
+def change_status_subtask(subtask_id: int, subtask: subtask_schema.SubtaskChangeStatus,
+                          current_user: User = Depends(get_current_user),
+                          db: Session = Depends(get_db)):
+    db_subtask = subtask_repo.get_subtask(db, subtask_id)
+    if not db_subtask:
+        raise HTTPException(status_code=404, detail="Subtask doesn't exist.")
+
+    task = task_repo.get_task(db, db_subtask.task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail="Subtask doesn't exist.")
+
+    project = project_repo.get_user_project(db, current_user.id, task.project_id)
+    if not project or project.owner_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Subtask doesn't exist.")
+
+    return subtask_repo.change_status_subtask(db, subtask, subtask_id)
 
 
 @router.post("/subtasks", response_model=subtask_schema.Subtask, tags=['subtask'])

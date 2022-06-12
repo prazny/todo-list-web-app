@@ -24,7 +24,7 @@ import { MaterialUIControllerProvider } from "context";
 ReactDOM.render(
   <BrowserRouter>
     <MaterialUIControllerProvider>
-      <App />
+      <App darkMode />
     </MaterialUIControllerProvider>
   </BrowserRouter>,
   document.getElementById("root")

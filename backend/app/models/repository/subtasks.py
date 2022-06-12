@@ -23,6 +23,22 @@ def create_subtask(db: Session, subtask: subtask_schema.SubtaskCreate, task_id: 
     return db_item
 
 
+def change_task(db: Session, subtask_id, task_id: int):
+    db_item = db.query(Subtask).filter(Subtask.id == subtask_id).first()
+    db_item.task_id = task_id
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+
+def change_status_subtask(db: Session, subtask: subtask_schema.SubtaskChangeStatus, subtask_id: int):
+    db_item = db.query(Subtask).filter(Subtask.id == subtask_id).first()
+    db_item.status = subtask.status
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+
 def delete_subtask(db: Session, subtask_id):
     db.query(Subtask).filter(Subtask.id == subtask_id).delete()
     db.commit()

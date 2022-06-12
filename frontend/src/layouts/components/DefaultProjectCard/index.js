@@ -31,8 +31,9 @@ import MDTypography from "components/MDTypography";
 import MDButton from "../../../components/MDButton";
 import ProjectService from "../../../services/ProjectService";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCoffee, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faCoffee, faPen, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {toast} from "react-toastify";
+import EditProject from "./edit-project";
 
 function DefaultProjectCard({
                               image,
@@ -41,14 +42,14 @@ function DefaultProjectCard({
                               description,
                               action,
                               project,
-                              onProjectDelete
+                              onChange
                             }) {
 
   const deleteProject = (id) => {
     try {
       const response = ProjectService.delete(id).then(res => {
         toast.success("Project deleted")
-        onProjectDelete()
+        onChange()
       })
       return true;
     } catch (err) {
@@ -58,12 +59,16 @@ function DefaultProjectCard({
     return "";
   }
 
+  const setCardReload = () => {
+    onChange()
+  }
+
   return (
     <Card
       sx={{
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "transparent",
+        backgroundColor: project.color,
         boxShadow: "none",
         overflow: "visible",
       }}
@@ -91,10 +96,9 @@ function DefaultProjectCard({
         </MDBox>
       </MDTypography>
       <MDBox mt={1} mx={0.5}>
-
         <MDTypography variant="button" fontWeight="regular" color="text"
                       textTransform="capitalize">
-          <MDTypography
+          <MDTypography noWrap
             component={Link}
             to={action.route}
             variant="h5"
@@ -112,7 +116,9 @@ function DefaultProjectCard({
           >
             {title}
           </MDTypography>
-          <MDButton onClick={() => deleteProject(project.id)} variant="text"
+
+          <EditProject onChange={setCardReload} id={project.id} />
+          <MDButton onClick={() => deleteProject(project.id)} variant="text" iconOnly
                     color="error">
             <FontAwesomeIcon icon={faTrash} />
           </MDButton>

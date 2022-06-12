@@ -19,7 +19,8 @@ def create_access_token(data: dict):
     expire = datetime.utcnow() + timedelta(minutes=float(config['OAUTH_ACCESS_TOKEN_EXPIRE_MINUTES']))
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, config['OAUTH_SECRET_KEY'], algorithm=config['OAUTH_ALGORITHM'])
-    return encoded_jwt
+
+    return {"token": encoded_jwt, "expired_at": expire}
 
 
 def get_current_user(db: Session = Depends(get_db), token: str = Depends(OAuth2PasswordBearer(tokenUrl="/api/oauth"

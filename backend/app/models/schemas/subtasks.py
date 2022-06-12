@@ -14,7 +14,11 @@ class SubtaskCreate(SubtaskBase):
 
 
 class SubtaskUpdate(SubtaskBase):
-    task_id: int
+    pass
+
+
+class SubtaskChangeStatus(BaseModel):
+    status: TaskStatus
 
 
 class Subtask(SubtaskBase):

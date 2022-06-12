@@ -23,7 +23,8 @@ def update_project(db: Session, project_id, project: project_schema.ProjectUpdat
     db_project.description = project.description
     db_project.color = project.color
     db.commit()
-    return True
+    db.refresh(db_project)
+    return db_project
 
 
 def create_project(db: Session, project: project_schema.ProjectCreate, user_id: int):

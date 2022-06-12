@@ -34,6 +34,7 @@ import OauthService from "../../../services/OauthService";
 import ProjectService from "../../../services/ProjectService";
 import MDInput from "../../../components/MDInput";
 import TaskService from "../../../services/TaskService";
+import {toast} from "react-toastify";
 
 
 function AddTask(props) {
@@ -41,21 +42,24 @@ function AddTask(props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [name, setName] = useState("");
+  const [color, setColor] = useState("#ffffff");
   const [message, setMessage] = useState("");
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await TaskService.create(name, "blue", props.projectId)
-      if (response.status === 200) {
-        setName("")
-        setMessage("Task created");
-        props.setProjectNeedReload()
-        setOpen(false)
-      } else {
-        setMessage("Some error occured");
-      }
+      TaskService.create(name, color, props.projectId).then(response => {
+        if (response.status === 200) {
+          setName("")
+          toast.success("Task created")
+          props.setProjectNeedReload()
+          setOpen(false)
+        } else {
+          toast.error("Some error occured")
+        }
+      })
+
 
     } catch (err) {
       console.log(err);
@@ -96,6 +100,10 @@ function AddTask(props) {
                 <MDInput type="text" label="Name" variant="standard"
                          value={name}
                          onChange={(e) => setName(e.target.value)}
+                         fullWidth/>
+                <MDInput type="color" label="Color" variant="standard"
+                         value={color}
+                         onChange={(e) => setColor(e.target.value)}
                          fullWidth/>
               </MDBox>
               <MDBox mt={4} mb={1}>

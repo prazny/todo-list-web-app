@@ -38,13 +38,13 @@ export function ProjectList() {
   } else {
     return (
       <div>
-        <AddProject setProjectListNeedReload={setProjectListNeedReload} />
+        <AddProject onChange={setProjectListNeedReload} />
       <br />
         <Grid container spacing={3}>
           {projects.map(item => (
             <Grid item xs={12} md={6} xl={3}>
               <DefaultProjectCard
-                onProjectDelete={setProjectListNeedReload}
+                onChange={setProjectListNeedReload}
                 title={item.name}
                 project={item}
                 image={bgImage}

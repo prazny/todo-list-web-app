@@ -33,6 +33,7 @@ import Fade from "@mui/material/Fade";
 import OauthService from "../../../services/OauthService";
 import ProjectService from "../../../services/ProjectService";
 import MDInput from "../../../components/MDInput";
+import {toast} from "react-toastify";
 
 
 function AddProject(props) {
@@ -42,7 +43,7 @@ function AddProject(props) {
   const handleClose = () => setOpen(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [color, setColor] = useState("#1a3c61");
+  const [color, setColor] = useState("#d1e0ef");
   const [message, setMessage] = useState("");
   const [state, setState] =  useState(counter)
 
@@ -55,10 +56,12 @@ function AddProject(props) {
       if (response.status === 200) {
         setName("")
         setDescription("")
-        setMessage("Project created");
-        props.setProjectListNeedReload()
+        toast.success("Project added")
+        props.onChange()
+        handleClose()
       } else {
-        setMessage("Some error occured");
+        toast.error("Some error occured")
+
       }
 
     } catch (err) {

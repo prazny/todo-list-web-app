@@ -1,5 +1,6 @@
 /* eslint-disable */
 import axios from "axios";
+import http from "../http-common";
 
 const querystring = require('query-string');
 
@@ -21,6 +22,25 @@ class OauthService {
       }
       return response.data;
     });
+  }
+
+  checkToken() {
+    let user = JSON.parse(localStorage.getItem("user"))
+    let expired_at = user['expired_at']
+    console.log(expired_at)
+    if( expired_at <= Math.floor((new Date).getTime()/1000)) {
+      this.logout()
+      window.location.reload();
+    }
+  }
+
+  activate(token) {
+    return axios.create({
+      baseURL: "http://127.0.0.1:8000/api",
+      headers: {
+        "Content-type": "application/json"
+      }
+    }).post("/oauth/activate/" + token)
   }
 
   logout() {

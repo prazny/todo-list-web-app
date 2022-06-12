@@ -44,7 +44,6 @@ function Cover() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("d")
       const response = await OauthService.register(email, firstname, lastname, password)
 
       if (response.status === 200) {
@@ -52,11 +51,12 @@ function Cover() {
         setLastname("")
         setEmail("")
         setPassword("")
-        setMessage("User created successfully");
+        setMessage("User created successfully. Activate your account!");
+        toast.success("User created successfully. Activate your account!")
       } else {
-        setMessage("Some error occured");
+        setMessage("Some error occur.");
+        toast.error("Some error occur.")
       }
-
     } catch (err) {
       console.log(err);
     }

@@ -9,11 +9,15 @@ router = APIRouter(prefix="/api")
 
 router.include_router(oauth.router, tags=['oauth'], prefix="/oauth")
 
+
+
 router.include_router(
     account.router,
     prefix="/account",
     dependencies=[Depends(get_current_user)]
 )
+
+
 # router.include_router(me.router, tags=['me'], prefix="/me")
 
 #router.include_router(projects.router, tags=['projects'], prefix="/account/projects")

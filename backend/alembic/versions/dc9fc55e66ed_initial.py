@@ -3,7 +3,7 @@ import sqlalchemy_utils
 from colour import Color
 
 Revision ID: dc9fc55e66ed
-Revises: 
+Revises:
 Create Date: 2022-06-10 13:09:02.509666
 
 
@@ -28,6 +28,8 @@ def upgrade() -> None:
     sa.Column('firstname', sa.String(length=50), nullable=True),
     sa.Column('lastname', sa.String(length=50), nullable=True),
     sa.Column('password', sa.Text(length=200), nullable=True),
+    sa.Column('is_active', sa.Boolean(), default=0),
+    sa.Column('activation_token', sa.String(length=100), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )
@@ -38,7 +40,7 @@ def upgrade() -> None:
     sa.Column('description', sa.String(length=400), nullable=True),
     sa.Column('color', sqlalchemy_utils.types.color.ColorType(length=20), nullable=False),
     sa.Column('owner_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['owner_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['owner_id'], ['users.id'], ondelete="CASCADE"),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_projects_id'), 'projects', ['id'], unique=False)
@@ -47,7 +49,7 @@ def upgrade() -> None:
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('color', sqlalchemy_utils.types.color.ColorType(length=20), nullable=True),
     sa.Column('project_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
+    sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ondelete="CASCADE"),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_tasks_id'), 'tasks', ['id'], unique=False)
@@ -56,11 +58,17 @@ def upgrade() -> None:
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('status', sa.Enum('active', 'pending', 'completed', name='taskstatus'), nullable=False),
     sa.Column('task_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['task_id'], ['tasks.id'], ),
+    sa.ForeignKeyConstraint(['task_id'], ['tasks.id'], ondelete="CASCADE"),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_subtasks_id'), 'subtasks', ['id'], unique=False)
     # ### end Alembic commands ###
+
+    conn = op.get_bind()
+    conn.execute(sa.sql.text('ALTER table users CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci'))
+    conn.execute(sa.sql.text('ALTER table projects CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci'))
+    conn.execute(sa.sql.text('ALTER table tasks CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci'))
+    conn.execute(sa.sql.text('ALTER table subtasks CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci'))
 
 
 def downgrade() -> None:

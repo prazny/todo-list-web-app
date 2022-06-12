@@ -48,7 +48,7 @@ export function Project(props) {
 
         {project.tasks.map(item => (
           <Grid key={item.id} item xs={12} md={6} xl={3}>
-            <Task key={item.id} id={item.id}></Task>
+            <Task onChange={setProjectNeedReload} key={item.id} id={item.id}></Task>
           </Grid>
         ))}
       </Grid>

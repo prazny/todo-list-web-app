@@ -46,8 +46,8 @@ import SignIn from "layouts/authentication/sign-in";
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
 
 // Images
-import brandWhite from "assets/images/logo-ct.png";
-import brandDark from "assets/images/logo-ct-dark.png";
+import brandWhite from "assets/images/logos/logo.png";
+import brandDark from "assets/images/logos/logo.png";
 import SignUp from "./layouts/authentication/sign-up";
 import Projects from "./layouts/projects";
 import ShowProject from "./layouts/projects/components/show-project";
@@ -64,7 +64,7 @@ export default function App() {
     sidenavColor,
     transparentSidenav,
     whiteSidenav,
-    darkMode,
+    darkMode = true,
   } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
@@ -140,7 +140,6 @@ export default function App() {
     if(pathname === "/authentication/sign-up") {
       return (
         <ThemeProvider theme={darkMode ? themeDark : theme}>
-          <BasicToast />
           <ToastContainer />
           <CssBaseline />
           <SignUp />
@@ -150,7 +149,6 @@ export default function App() {
 
     return (
       <ThemeProvider theme={darkMode ? themeDark : theme}>
-        <BasicToast />
         <ToastContainer />
         <CssBaseline />
         <SignIn />
@@ -172,7 +170,6 @@ export default function App() {
             onMouseLeave={handleOnMouseLeave}
           />
           <Configurator />
-          {configsButton}
         </>
       )}
       {layout === "vr" && <Configurator />}
