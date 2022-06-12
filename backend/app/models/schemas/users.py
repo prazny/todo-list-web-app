@@ -1,19 +1,37 @@
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
-from pydantic import BaseModel, SecretStr
+from pydantic import BaseModel, SecretStr, validator, EmailStr
 
 
 class UserBase(BaseModel):
-    email: str
     firstname: str
     lastname: str
 
+    @validator('firstname')
+    def firstname_must_be_of_length_between_3_50(cls, v):
+        if len(v) > 50 or len(v) < 3:
+            raise ValueError('must be of length between 3 and 50')
+        return v.title()
+
+    @validator('lastname')
+    def lastname_must_be_of_length_between_3_50(cls, v):
+        if len(v) > 50 or len(v) < 3:
+            raise ValueError('must be of length between 3 and 50')
+        return v.title()
+
 
 class UserCreate(UserBase):
+    email: EmailStr
+    password: str
+
+
+class UserUpdate(UserBase):
     password: str
 
 
 class User(UserBase):
+    email: str
+
     # id: int
 
     class Config:

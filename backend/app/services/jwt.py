@@ -22,7 +22,8 @@ def create_access_token(data: dict):
     return encoded_jwt
 
 
-def get_current_user(db: Session = Depends(get_db), token: str = Depends(OAuth2PasswordBearer(tokenUrl="token"))):
+def get_current_user(db: Session = Depends(get_db), token: str = Depends(OAuth2PasswordBearer(tokenUrl="/api/oauth"
+                                                                                                       "/token"))):
     try:
         decode = jwt.decode(token, config['OAUTH_SECRET_KEY'], algorithms=config['OAUTH_ALGORITHM'])
         username: str = decode.get("sub")

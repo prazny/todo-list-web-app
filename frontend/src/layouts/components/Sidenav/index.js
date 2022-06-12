@@ -46,12 +46,16 @@ import {
   setTransparentSidenav,
   setWhiteSidenav,
 } from "context";
+import OauthService from "../../../services/OauthService";
+
+
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const location = useLocation();
   const collapseName = location.pathname.replace("/", "");
+
 
   let textColor = "white";
 
@@ -62,6 +66,10 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   }
 
   const closeSidenav = () => setMiniSidenav(dispatch, true);
+  const logoutUser = () => {
+    OauthService.logout();
+    window.location.reload();
+  }
 
   useEffect(() => {
     // A function that sets the mini state of the sidenav.
@@ -71,7 +79,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       setWhiteSidenav(dispatch, window.innerWidth < 1200 ? false : whiteSidenav);
     }
 
-    /** 
+    /**
      The event listener that's calling the handleMiniSidenav function when resizing the window.
     */
     window.addEventListener("resize", handleMiniSidenav);
@@ -182,14 +190,14 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       <MDBox p={2} mt="auto">
         <MDButton
           component="a"
-          href="https://www.creative-tim.com/product/material-dashboard-pro-react"
+          onClick={logoutUser}
           target="_blank"
           rel="noreferrer"
           variant="gradient"
           color={sidenavColor}
           fullWidth
         >
-          upgrade to pro
+          Logout
         </MDButton>
       </MDBox>
     </SidenavRoot>

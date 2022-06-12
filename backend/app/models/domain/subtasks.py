@@ -18,5 +18,5 @@ class Subtask(Base):
     name = Column(String(50), nullable=False)
     status = Column(Enum(TaskStatus), nullable=False)
     task_id = Column(Integer, ForeignKey("tasks.id"), nullable=False)
-    task = relationship("User", back_populates="subtasks")
+    task = relationship("Task", back_populates="subtasks")
     # assignment = User

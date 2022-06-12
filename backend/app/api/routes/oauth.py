@@ -15,7 +15,7 @@ router = APIRouter()
 
 
 @router.post("/token", response_model=schema_tokens.Token)
-def token(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+def login_for_access_token(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = crud_users.authenticate_user(db, form.username, form.password)
     if user:
         access_token = create_access_token(data={"sub": user.email})

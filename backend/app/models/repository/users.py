@@ -21,6 +21,15 @@ def create_user(db: Session, user: user_schema.UserCreate):
     return db_user
 
 
+def update_user(db: Session, user_id: int, user: user_schema.UserUpdate):
+    db_user = db.query(User).filter(User.id == user_id).first()
+    db_user.password = pwd_context.hash(user.password)
+    db_user.firstname = user.firstname
+    db_user.lastname = user.lastname
+    db.commit()
+    return db_user
+
+
 def authenticate_user(db: Session, email: str, password: str):
     user = get_user_by_email(db, email)
     if not user:
@@ -31,4 +40,3 @@ def authenticate_user(db: Session, email: str, password: str):
     if not pwd_context.verify(password, user.password):
         return False
     return user
-

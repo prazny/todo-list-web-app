@@ -12,11 +12,10 @@ class Project(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), nullable=False)
     description = Column(String(400))
-    color = Column(ColorType, nullable=False)
+    color = Column(String(50))
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     owner = relationship("User", back_populates="projects")
-    tasks = relationship("Task", back_populates="projects")
-
+    tasks = relationship("Task", back_populates="project")
 
     def __repr__(self):
         return 'id: {}, root cause: {}'.format(self.id, self.root_cause)

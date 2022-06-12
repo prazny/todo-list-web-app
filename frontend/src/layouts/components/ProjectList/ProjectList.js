@@ -1,29 +1,35 @@
+/* eslint-disable */
 import {useEffect, useState} from "react";
-import Grid from "@mui/material/Grid";
 
-import DefaultProjectCard
-  from "../../../examples/Cards/ProjectCards/DefaultProjectCard";
-import MDBox from "../../../components/MDBox";
+import Grid from "@mui/material/Grid";
+import ProjectService from "services/ProjectService"
+
+
+import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+import AddProject from "../../projects/components/add-project";
+import TaskService from "../../../services/TaskService";
+import DefaultProjectCard from "../DefaultProjectCard";
 
 export function ProjectList() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [items, setItems] = useState([]);
+  const [projects, setProjects] = useState(null);
+  const [needReload, setNeedReload] = useState(true);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/account/projects")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setItems(result);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      )
-  }, [])
+    if(needReload) {
+      setIsLoaded(false)
+      ProjectService.getAll().then(res => {
+        setProjects(res.data)
+        setIsLoaded(true)
+        setNeedReload(false)
+      });
+    }
+  }, [needReload])
+
+  const setProjectListNeedReload = () => {
+    setNeedReload(true);
+  }
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -31,16 +37,21 @@ export function ProjectList() {
     return <div>Loading...</div>;
   } else {
     return (
-      <MDBox p={2}>
-        <Grid container spacing={6} display="flex">
-          {items.map(item => (
+      <div>
+        <AddProject setProjectListNeedReload={setProjectListNeedReload} />
+      <br />
+        <Grid container spacing={3}>
+          {projects.map(item => (
             <Grid item xs={12} md={6} xl={3}>
               <DefaultProjectCard
+                onProjectDelete={setProjectListNeedReload}
                 title={item.name}
-                description="As Uber works through a huge amount of internal management turmoil."
+                project={item}
+                image={bgImage}
+                description={item.description}
                 action={{
                   type: "internal",
-                  route: "/somewhere",
+                  route: "/projects/"+item.id,
                   color: "info",
                   label: "view project",
                 }}
@@ -50,7 +61,8 @@ export function ProjectList() {
             </Grid>
           ))}
         </Grid>
-      </MDBox>
+      </div>
+
 
     );
   }

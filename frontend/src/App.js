@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
 =========================================================
 * Material Dashboard 2 React - v2.1.0
@@ -38,12 +40,19 @@ import themeDark from "assets/theme-dark";
 // Material Dashboard 2 React routes
 import routes from "routes";
 
+import SignIn from "layouts/authentication/sign-in";
+
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
 
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+import SignUp from "./layouts/authentication/sign-up";
+import Projects from "./layouts/projects";
+import ShowProject from "./layouts/projects/components/show-project";
+import {toast, ToastContainer} from "react-toastify";
+import BasicToast from "./layouts/components/BasicToast/basic-toast";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -103,6 +112,7 @@ export default function App() {
       return null;
     });
 
+
   const configsButton = (
     <MDBox
       display="flex"
@@ -126,9 +136,30 @@ export default function App() {
       </Icon>
     </MDBox>
   );
+  if(!localStorage.getItem("user")) {
+    if(pathname === "/authentication/sign-up") {
+      return (
+        <ThemeProvider theme={darkMode ? themeDark : theme}>
+          <BasicToast />
+          <ToastContainer />
+          <CssBaseline />
+          <SignUp />
+        </ThemeProvider>
+      );
+    }
 
+    return (
+      <ThemeProvider theme={darkMode ? themeDark : theme}>
+        <BasicToast />
+        <ToastContainer />
+        <CssBaseline />
+        <SignIn />
+      </ThemeProvider>
+    );
+  }
   return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
+      <ToastContainer />
       <CssBaseline />
       {layout === "dashboard" && (
         <>
@@ -146,8 +177,13 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Routes>
+        <Route path="projects">
+          <Route path=":projectId" element={<ShowProject />} />
+          <Route path="" element={<Projects/>} />
+        </Route>
+
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="*" element={<Navigate to="/projects" />} />
       </Routes>
     </ThemeProvider>
   );

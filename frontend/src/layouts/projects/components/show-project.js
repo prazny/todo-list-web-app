@@ -24,19 +24,22 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 
 import { ProjectList } from "layouts/components/ProjectList/ProjectList"
-import AddProject from "./components/add-project";
 import {createRef, useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+import {Project} from "../../components/Project/project";
 
 
-function Projects() {
+function ShowProject() {
+  let { projectId } = useParams();
+
   return (
     <DashboardLayout>
       <DashboardNavbar/>
       <MDBox py={3}>
-        <ProjectList />
+        <Project id={projectId} />
       </MDBox>
     </DashboardLayout>
   );
 }
 
-export default Projects;
+export default ShowProject;
