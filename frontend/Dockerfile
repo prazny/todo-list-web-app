@@ -7,6 +7,8 @@ WORKDIR /usr/src/front
 COPY package.json package-lock.json ./
 RUN npm ci
 
+CMD ["alembic upgrade head"]
+
 COPY . /front
 
 EXPOSE 3000

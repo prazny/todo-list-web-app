@@ -13,7 +13,7 @@ class OauthService {
       headers: {
         "Content-type": "application/x-www-form-urlencoded"
       }
-    }).post("/oauth/token", querystring.stringify({
+    }).post("/auth/token", querystring.stringify({
       username: username, //gave the values directly for testing
       password: password,
     })).then(response => {
@@ -40,7 +40,7 @@ class OauthService {
       headers: {
         "Content-type": "application/json"
       }
-    }).post("/oauth/activate/" + token)
+    }).post("/auth/activate/" + token)
   }
 
   logout() {
@@ -53,7 +53,7 @@ class OauthService {
       headers: {
         "Content-type": "application/json"
       }
-    }).post("/oauth/register", {
+    }).post("/auth/register", {
       email, firstname, lastname, password
     });
   }

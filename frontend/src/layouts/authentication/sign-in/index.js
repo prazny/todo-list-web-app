@@ -68,10 +68,9 @@ export function SignIn(props) {
 
     OauthService.login(username, password).then(
       response => {
-        if(response.status === 200) {
           toast.success("Logged in")
           window.location.reload();
-        }
+          console.log("ss")
       },
     ).catch(
       error => {
